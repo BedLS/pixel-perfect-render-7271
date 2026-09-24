@@ -248,6 +248,3 @@ function Row({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-
-// Select est importé pour rester disponible dans les évolutions du formulaire
-void Select;
