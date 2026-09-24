@@ -1,5 +1,5 @@
-import type { CompanyType, Prospect, Status } from "./types";
-import { SECTORS } from "./types";
+import type { CompanyType, Interaction, Prospect, Status } from "./types";
+import { INTERACTION_TYPES, SECTORS } from "./types";
 
 // Générateur déterministe simple (données fictives, reproductibles)
 function mulberry32(seed: number) {
