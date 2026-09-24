@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell } from "@/components/AppShell";
-import { Button, Card, Field, Input, Select } from "@/components/ui-kit";
+import { Button, Card, Field, Input } from "@/components/ui-kit";
 import { DEFAULT_TARGET, useStore } from "@/lib/store";
 import { matchesTarget } from "@/lib/priority";
 import { COMPANY_TYPES, SECTORS } from "@/lib/types";
