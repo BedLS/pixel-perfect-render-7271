@@ -10,33 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProspectsDuJourRouteImport } from './routes/prospects-du-jour'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProspectsDuJourRoute = ProspectsDuJourRouteImport.update({
+  id: '/prospects-du-jour',
+  path: '/prospects-du-jour',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/prospects-du-jour': typeof ProspectsDuJourRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/prospects-du-jour': typeof ProspectsDuJourRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/prospects-du-jour': typeof ProspectsDuJourRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/prospects-du-jour'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/prospects-du-jour'
+  id: '__root__' | '/' | '/prospects-du-jour'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ProspectsDuJourRoute: typeof ProspectsDuJourRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +58,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/prospects-du-jour': {
+      id: '/prospects-du-jour'
+      path: '/prospects-du-jour'
+      fullPath: '/prospects-du-jour'
+      preLoaderRoute: typeof ProspectsDuJourRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ProspectsDuJourRoute: ProspectsDuJourRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
