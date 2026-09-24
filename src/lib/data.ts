@@ -147,6 +147,10 @@ function daysAgoISO(days: number) {
   return new Date(base - days * 86400000).toISOString();
 }
 
+function pick<T>(arr: readonly T[], r: number): T {
+  return arr[Math.floor(r * arr.length)]!;
+}
+
 function buildProspects(): Prospect[] {
   const rnd = mulberry32(42);
   const list: Prospect[] = [];
@@ -156,38 +160,36 @@ function buildProspects(): Prospect[] {
     let name = "";
     let guard = 0;
     do {
-      name = `${PREFIXES[Math.floor(rnd() * PREFIXES.length)]} ${
-        CORES[Math.floor(rnd() * CORES.length)]
-      }`;
+      name = `${pick(PREFIXES, rnd())} ${pick(CORES, rnd())}`;
       guard++;
     } while (used.has(name) && guard < 50);
     used.add(name);
 
-    const place = CITIES[Math.floor(rnd() * CITIES.length)];
-    const sector = SECTORS[Math.floor(rnd() * SECTORS.length)];
+    const place = pick(CITIES, rnd());
+    const sector = pick(SECTORS, rnd());
     const employees = Math.max(3, Math.round(rnd() * 480));
     const revenue = Math.round((employees * (90 + rnd() * 160)) / 10) * 10; // k€
-    const companyType =
-      COMPANY_TYPES_POOL[Math.floor(rnd() * COMPANY_TYPES_POOL.length)];
-    const first = FIRST_NAMES[Math.floor(rnd() * FIRST_NAMES.length)];
-    const last = LAST_NAMES[Math.floor(rnd() * LAST_NAMES.length)];
-    const role = ROLES[Math.floor(rnd() * ROLES.length)];
-    const status = STATUS_POOL[Math.floor(rnd() * STATUS_POOL.length)];
+    const companyType = pick(COMPANY_TYPES_POOL, rnd());
+    const first = pick(FIRST_NAMES, rnd());
+    const last = pick(LAST_NAMES, rnd());
+    const role = pick(ROLES, rnd());
+    const status = pick(STATUS_POOL, rnd());
     const domain = `${slug(name)}.fr`;
 
-    const interactions =
+    const interactions: Interaction[] =
       status === "Nouveau" || status === "À contacter"
         ? []
-        : Array.from({ length: 1 + Math.floor(rnd() * 3) }).map((_, k) => ({
-            id: `int-${i}-${k}`,
-            date: daysAgoISO(1 + Math.floor(rnd() * 40)),
-            type: (["Appel", "Email", "Rendez-vous", "Autre"] as const)[
-              Math.floor(rnd() * 4)
-            ],
-            comment:
-              "Échange sur les besoins en cours et le calendrier de décision.",
-            nextAction: rnd() > 0.5 ? "Rappeler la semaine prochaine" : undefined,
-          }));
+        : Array.from({ length: 1 + Math.floor(rnd() * 3) }).map((_, k) => {
+            const withNext = rnd() > 0.5;
+            return {
+              id: `int-${i}-${k}`,
+              date: daysAgoISO(1 + Math.floor(rnd() * 40)),
+              type: pick(INTERACTION_TYPES, rnd()),
+              comment:
+                "Échange sur les besoins en cours et le calendrier de décision.",
+              ...(withNext ? { nextAction: "Rappeler la semaine prochaine" } : {}),
+            };
+          });
 
     list.push({
       id: `p-${i + 1}`,
