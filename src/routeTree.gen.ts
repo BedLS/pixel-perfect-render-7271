@@ -10,11 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BaseProspectsRouteImport } from './routes/base-prospects'
+import { Route as CibleRouteImport } from './routes/cible'
 import { Route as ProspectsDuJourRouteImport } from './routes/prospects-du-jour'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BaseProspectsRoute = BaseProspectsRouteImport.update({
+  id: '/base-prospects',
+  path: '/base-prospects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CibleRoute = CibleRouteImport.update({
+  id: '/cible',
+  path: '/cible',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProspectsDuJourRoute = ProspectsDuJourRouteImport.update({
@@ -25,27 +37,35 @@ const ProspectsDuJourRoute = ProspectsDuJourRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/base-prospects': typeof BaseProspectsRoute
+  '/cible': typeof CibleRoute
   '/prospects-du-jour': typeof ProspectsDuJourRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/base-prospects': typeof BaseProspectsRoute
+  '/cible': typeof CibleRoute
   '/prospects-du-jour': typeof ProspectsDuJourRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/base-prospects': typeof BaseProspectsRoute
+  '/cible': typeof CibleRoute
   '/prospects-du-jour': typeof ProspectsDuJourRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/prospects-du-jour'
+  fullPaths: '/' | '/base-prospects' | '/cible' | '/prospects-du-jour'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/prospects-du-jour'
-  id: '__root__' | '/' | '/prospects-du-jour'
+  to: '/' | '/base-prospects' | '/cible' | '/prospects-du-jour'
+  id: '__root__' | '/' | '/base-prospects' | '/cible' | '/prospects-du-jour'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BaseProspectsRoute: typeof BaseProspectsRoute
+  CibleRoute: typeof CibleRoute
   ProspectsDuJourRoute: typeof ProspectsDuJourRoute
 }
 
@@ -56,6 +76,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/base-prospects': {
+      id: '/base-prospects'
+      path: '/base-prospects'
+      fullPath: '/base-prospects'
+      preLoaderRoute: typeof BaseProspectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cible': {
+      id: '/cible'
+      path: '/cible'
+      fullPath: '/cible'
+      preLoaderRoute: typeof CibleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/prospects-du-jour': {
@@ -70,6 +104,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BaseProspectsRoute: BaseProspectsRoute,
+  CibleRoute: CibleRoute,
   ProspectsDuJourRoute: ProspectsDuJourRoute,
 }
 export const routeTree = rootRouteImport
